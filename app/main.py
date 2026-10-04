@@ -3,6 +3,8 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database.dependencies import get_db
 from app.auth.router import router as auth_router
+from app.routers.users import router as user_router
+from app.routers.categories import router as category_router
 
 app = FastAPI(
     title = "Mini E-Commerce API",
@@ -11,6 +13,8 @@ app = FastAPI(
 )
 
 app.include_router(auth_router)
+app.include_router(user_router)
+app.include_router(category_router)
 
 @app.get("/")
 async def root():

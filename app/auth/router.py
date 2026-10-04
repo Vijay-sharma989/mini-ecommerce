@@ -7,12 +7,23 @@ from app.auth.security import hash_password, verify_password
 from app.database.dependencies import get_db
 from app.models.user import User
 from app.auth.jwt import create_access_token
+from app.models.enums import UserRole
+from app.auth.dependencies import required_role
+
 
 
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
 )
+
+
+# @router.get("/admin-test")
+# async def admin_test(current_user: User = Depends(required_role(UserRole.ADMIN))):
+#     return {
+#         "message": "You are admin",
+#         "user": current_user.email
+#     }
 
 
 @router.post("/signup", status_code=status.HTTP_201_CREATED)
@@ -56,13 +67,13 @@ async def login(user_data: UserLogin, db: AsyncSession = Depends(get_db)):
     existing_user = result.scalar_one_or_none()
 
     if not existing_user:
-        raise Exception(
+        raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email and password"
         )
 
     if not verify_password(user_data.password, existing_user.password):
-        raise Exception(
+        raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             details="Invalid email and password"
         )
