@@ -9,7 +9,7 @@ from sqlalchemy import select
 
 router = APIRouter(
     prefix="/categories",
-    tags=['category']
+    tags=['Category']
 )
 
 @router.post('/category', response_model=CategoryResponse)

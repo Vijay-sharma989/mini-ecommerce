@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 from decimal import Decimal
 from datetime import datetime
+from typing import Optional
 
 class ProductCreate(BaseModel):
     name: str
@@ -8,9 +9,7 @@ class ProductCreate(BaseModel):
     category_id: int
     price: Decimal
     stock: int
-    image_url: str
-
-
+    image_url: str | None = None
 
 
 class ProductResponse(BaseModel):
@@ -21,12 +20,25 @@ class ProductResponse(BaseModel):
     seller_id: int
     price: Decimal
     stock: int
-    image_url: str
+    image_url: str | None
     is_active: bool
     created_at: datetime
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class UpdateProduct(BaseModel):
+    name: Optional[str] | None
+    description: Optional[str] | None
+    price: Optional[float] | None
+    is_active: Optional[bool] | None
+    category_id: Optional[int] | None
+
+
+class ProductListResponse(BaseModel):
+    products: list[ProductResponse]
+    next_cursor: Optional[int] | None
 
 # product = ProductCreate(
 #     name="iPhone 17",

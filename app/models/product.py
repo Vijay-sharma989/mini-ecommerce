@@ -15,6 +15,10 @@ class Product(Base):
             "stock >= 0",
             name="check_product_stock_non_negative"
         ),
+        CheckConstraint(
+            "price >= 0",
+            name="check_product_price_non_negative"
+        )
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -29,4 +33,4 @@ class Product(Base):
     image_url: Mapped[str|None] = mapped_column(String(500), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default= lambda: datetime.now(timezone.utc), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
